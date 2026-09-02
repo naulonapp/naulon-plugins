@@ -83,19 +83,24 @@ namespaced `naulon` object:
 holder-of-key bound: re-reading requires a signature from that wallet, so possessing the token
 alone is not enough.
 
-### 4. Optional — cross-check against the ledger
+### 4. Optional — cross-check against the ledger, and know its limits
 
-```
-GET https://<publisher host>/licenses/<jti>
-```
+**The signature check in step 2 is the authority.** This step is corroboration and it is often
+not available. Measured 2026-09-02:
 
-Returns `{jti, found, revoked, event}`. Two things to know:
+| Request | Result |
+|---|---|
+| `https://<publisher host>/licenses/<jti>` | `404` when the publisher serves their own site |
+| `https://gate.naulon.app/licenses/<jti>` with a publisher `Host` header | `403` — spoofing is blocked at the edge |
+| `https://gate.naulon.app/licenses/<jti>` | works, but only for licences issued for hosts that gate routes |
 
-- **It is scoped by `Host`.** You must ask the publisher's own host, not an arbitrary one. A
-  mismatch answers the same `404` as not-found, on purpose — it never confirms a `jti` exists
-  under a different publisher.
-- **A `404` here is not proof of forgery.** It means this host does not attribute that event.
-  The signature check in step 2 is the authority; this is corroboration.
+The route is scoped by `Host`, and a publisher running the naulon SDK in front of their own app
+is legitimately not in that routing set — so their `/licenses/:jti` is simply not a route on
+their origin. That is the common case, not an edge case.
+
+**Therefore: never read a `404` here as evidence of forgery.** It means "this host does not
+answer that question", which is a statement about routing, not about the licence. A licence whose
+signature verifies against the issuer's published key is proven, full stop.
 
 ### 5. Report it honestly
 
@@ -104,7 +109,8 @@ State what you verified and what you did not:
 - signature valid against key `<kid>` from `<issuer host>`
 - resource, amount (converted from micro-USDC), and the author wallets paid
 - issued at `<iat>`; re-read window closed at `<exp>` if past
-- whether the ledger cross-check ran, and what it said
+- whether the ledger cross-check ran, what it said, and — if it 404'd — that this is
+  expected for a self-served publisher and is not a negative result
 
 Do not describe a licence as "verified by naulon". It is verified against published keys, by
 you. That distinction is the reason the artifact is worth anything.
