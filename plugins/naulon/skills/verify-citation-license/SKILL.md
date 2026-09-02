@@ -19,15 +19,31 @@ than one you can check yourself.
 - A publisher or author wants to confirm they were actually paid for a citation.
 - Someone asks what a `LICENSE eyJ…` string means.
 
-## The one thing people get wrong
+## Two things people get wrong
 
-**`exp` is the re-read window, not the validity of the record.** A CLT's lifetime is short by
-design — it is an unrevocable bearer credential, so a short TTL is the kill switch on the
+**1. `exp` is the re-read window, not the validity of the record.** A licence's lifetime is short
+by design — it is an unrevocable bearer credential, so a short TTL is the kill switch on the
 offline tier. An expired licence still proves the payment happened. It only stops entitling a
 fresh fetch of the bytes.
 
 So an out-of-window licence is **"issued at T, re-read window closed"** — never "invalid", and
 never "this citation is fake". Say it that way.
+
+**2. Two different objects arrive here, and `naulon.grant` tells them apart.**
+
+| | `grant` absent or `"read"` | `grant: "none"` |
+|---|---|---|
+| What it is | an **access licence** — the token an agent presents to re-read | a **citation record** |
+| `exp` | always present; short | **absent — it never expires** |
+| Entitles | a free re-read within the window | nothing at all |
+
+A record carrying no `exp` is correct, not malformed: it is permanent precisely *because* it
+grants nothing, so there is nothing to revoke. Never report a missing `exp` on a record as a
+defect, and never treat a record as proof that someone may fetch the bytes — it is proof that a
+payment happened, which is the question a citation actually raises.
+
+An **absent** `grant` means `"read"` (every licence minted before records existed). Anything
+else you do not recognise, treat as granting nothing.
 
 ## Steps
 
@@ -78,6 +94,14 @@ namespaced `naulon` object:
 | `settlementRef` | the on-chain reference |
 | `payees` | the author shares, in `full` payees mode — **the wallets that actually received the money** |
 | `payeesHash` / `payTo` | `hashed` mode: a digest plus the advertised primary recipient |
+| `grant` | `"read"` (or absent) = an access licence · `"none"` = a permanent citation record |
+| `scope` | present on a licence covering MANY paths: `{patterns: […]}`, RFC 9309 (`*` crosses segments, trailing `$` anchors). When present it, not `slug`, is what the licence covers. |
+| `terms` | the RSL 1.0 usage terms this executes — `ai-input`, `ai-index`, `search` |
+| `period` | the purchased period; `until: null` is permanent |
+
+`sub` is the licence's subject — the payer's wallet, or a stable buyer identity when the licence
+was issued to an account. It is a provenance claim, not a person: do not treat it as an identity
+you can attribute to a human.
 
 `jti` is the settlement event's id. A `cnf` claim with `naulon:addr` means the licence is
 holder-of-key bound: re-reading requires a signature from that wallet, so possessing the token
@@ -93,6 +117,7 @@ not available. Measured 2026-09-02:
 | `https://<publisher host>/licenses/<jti>` | `404` when the publisher serves their own site |
 | `https://gate.naulon.app/licenses/<jti>` with a publisher `Host` header | `403` — spoofing is blocked at the edge |
 | `https://gate.naulon.app/licenses/<jti>` | works, but only for licences issued for hosts that gate routes |
+| `https://gate.naulon.app/licenses/<jti>/record` | the permanent citation record for that same settlement, same scoping |
 
 The route is scoped by `Host`, and a publisher running the naulon SDK in front of their own app
 is legitimately not in that routing set — so their `/licenses/:jti` is simply not a route on
