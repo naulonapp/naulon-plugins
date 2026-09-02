@@ -1,0 +1,20 @@
+{
+  "name": "naulon",
+  "interface": {
+    "displayName": "naulon"
+  },
+  "plugins": [
+    {
+      "name": "naulon",
+      "source": {
+        "source": "local",
+        "path": "./plugins/naulon"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education & Research"
+    }
+  ]
+}

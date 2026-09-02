@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "naulon",
+  "description": "Pay for and cite tolled sources, with a licence anyone can verify offline.",
+  "owner": {
+    "name": "naulon",
+    "url": "https://naulon.app"
+  },
+  "plugins": [
+    {
+      "name": "naulon",
+      "description": "Discover, price, pay for and cite sources whose publishers charge for machine reading. Each paid read returns a Citation License verifiable against published keys without calling naulon.",
+      "author": {
+        "name": "naulon",
+        "url": "https://naulon.app"
+      },
+      "source": "./plugins/naulon",
+      "category": "research"
+    }
+  ]
+}
