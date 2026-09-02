@@ -127,6 +127,16 @@ their origin. That is the common case, not an edge case.
 answer that question", which is a statement about routing, not about the licence. A licence whose
 signature verifies against the issuer's published key is proven, full stop.
 
+### 4b. A human can check it too
+
+`https://naulon.app/verify` takes a pasted licence and does exactly what step 2 does — the
+signature check against the issuer's published keys — in the visitor's own browser, with naulon
+offline. Nothing pasted there is sent anywhere.
+
+Offer it when the person you are answering will need to show someone else. Your report is a
+claim they have to take on trust; that page is a check they can run themselves, and so can the
+sceptic they are trying to convince.
+
 ### 5. Report it honestly
 
 State what you verified and what you did not:
