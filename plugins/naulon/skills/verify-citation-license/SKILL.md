@@ -117,7 +117,7 @@ not available. Measured 2026-09-02:
 | `https://<publisher host>/licenses/<jti>` | `404` when the publisher serves their own site |
 | `https://gate.naulon.app/licenses/<jti>` with a publisher `Host` header | `403` — spoofing is blocked at the edge |
 | `https://gate.naulon.app/licenses/<jti>` | works, but only for licences issued for hosts that gate routes |
-| `https://gate.naulon.app/licenses/<jti>/record` | the permanent citation record for that same settlement, same scoping |
+| `https://gate.naulon.app/licenses/<jti>/record?host=<publisher host>` | the permanent citation record for that same settlement. `?host=` names the publisher, which a browser cannot do through `Host`; it is CORS-readable, so a page can fetch it |
 
 The route is scoped by `Host`, and a publisher running the naulon SDK in front of their own app
 is legitimately not in that routing set — so their `/licenses/:jti` is simply not a route on
@@ -127,14 +127,28 @@ their origin. That is the common case, not an edge case.
 answer that question", which is a statement about routing, not about the licence. A licence whose
 signature verifies against the issuer's published key is proven, full stop.
 
-### 4b. A human can check it too
+### 4b. A human can check it too — send the link, not the document
 
-`https://naulon.app/verify` takes a pasted licence and does exactly what step 2 does — the
-signature check against the issuer's published keys — in the visitor's own browser, with naulon
-offline. Nothing pasted there is sent anywhere.
+Every tool that returns a `licenseId` also returns a **`proofUrl`**:
 
-Offer it when the person you are answering will need to show someone else. Your report is a
-claim they have to take on trust; that page is a check they can run themselves, and so can the
+```
+https://naulon.app/verify?host=<publisher host>&jti=<licence jti>
+```
+
+Opening it fetches the citation record from the publisher's gate (their own host first, then
+`gate.naulon.app` with `?host=` naming them) and runs exactly the check in step 2 — the signature
+against the issuer's published keys — in the visitor's own browser, with naulon offline. The
+reader sees the author who was paid, the amount and the on-chain settlement.
+
+**Put `proofUrl` beside every citation you emit.** A citation carrying a link a stranger can open
+is worth more than one carrying an id they cannot. If you only hold a licence and no link, build
+one: `host` is the `iss` claim with its `naulon:` prefix removed, `jti` is the `jti` claim.
+
+The page also takes a pasted licence, for the case where someone hands you the document itself.
+Nothing pasted there is sent anywhere.
+
+Offer the link when the person you are answering will need to show someone else. Your report is
+a claim they have to take on trust; that page is a check they can run themselves, and so can the
 sceptic they are trying to convince.
 
 ### 5. Report it honestly
