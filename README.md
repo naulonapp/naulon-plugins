@@ -25,13 +25,25 @@ export NAULON_AGENT_TOKEN=nln_agent_…
 /plugin install naulon@naulon
 ```
 
-Both read the same plugin directory. The token travels as `Authorization: Bearer` — Claude Code
-expands it into `headers`, Codex reads `bearer_token_env_var`; both keys name the same variable
-and each ecosystem ignores the other's. Nothing is stored in this repo.
+Both read the same plugin directory. Nothing is stored in this repo — the token travels as
+`Authorization: Bearer`, read from your environment at connect time.
 
-Without the variable set, Claude Code names it in a startup warning and the server answers `401`.
-Discovery and quotes cost nothing, but the token is how the fleet knows who is asking, so every
-tool needs it.
+`.mcp.json` carries **two** credential keys and both are load-bearing, one per ecosystem. Claude
+Code reads `headers` and expands `${NAULON_AGENT_TOKEN}` inside it. Codex has no `headers` field —
+its field is `http_headers` and its values are sent verbatim with no expansion — so for Codex the
+credential travels only on `bearer_token_env_var`. Each ecosystem drops the other's key rather than
+rejecting it. Deleting either one silently breaks that half.
+
+The export is a hard requirement in Codex: an unset or empty variable is a startup error naming the
+variable, because `bearer_token_env_var` turns Codex's OAuth off. In Claude Code it is a named
+startup warning plus a `401`. Discovery and quotes cost nothing, but the token is how the fleet
+knows who is asking, so every tool needs it.
+
+**Already connected by hand?** Claude Code de-duplicates MCP servers by URL, whatever they are
+named. If you previously ran `claude mcp add --transport http naulon https://gate.naulon.app/_naulon/mcp …`
+that server wins and this plugin's server is silently suppressed — you are not missing anything,
+but you are also not gaining anything. Remove the hand-added one (`claude mcp remove naulon`) if
+you would rather the plugin owned it.
 
 ## Layout
 
