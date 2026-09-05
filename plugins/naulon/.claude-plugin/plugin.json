@@ -1,6 +1,6 @@
 {
   "name": "naulon",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Discover, price, pay for and cite tolled sources. Each paid read returns a Citation License a third party can verify against published keys.",
   "author": {
     "name": "naulon",
@@ -9,5 +9,13 @@
   "homepage": "https://naulon.app",
   "repository": "https://github.com/naulonapp/naulon-plugins",
   "license": "MIT",
-  "keywords": ["citation", "licensing", "research", "x402", "usdc", "provenance", "attribution"]
+  "keywords": [
+    "citation",
+    "licensing",
+    "research",
+    "x402",
+    "usdc",
+    "provenance",
+    "attribution"
+  ]
 }

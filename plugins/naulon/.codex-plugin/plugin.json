@@ -1,6 +1,6 @@
 {
   "name": "naulon",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Discover, price, pay for and cite tolled sources. Each paid read returns a Citation License a third party can verify against published keys.",
   "author": {
     "name": "naulon",
@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "naulon",
     "shortDescription": "Pay for and cite tolled sources, with a verifiable licence",
-    "longDescription": "naulon lets an agent find sources whose publishers charge for machine reading, see the exact price before committing, pay the author directly, and come away with a Citation License that anyone can verify against published keys without calling naulon. Discovery and price quotes are free. Payment settles from your own wallet straight to the author \u2014 naulon never holds funds. Humans always read free; only agents are tolled.",
+    "longDescription": "naulon lets an agent find sources whose publishers charge for machine reading, see the exact price before committing, pay the author directly, and come away with a Citation License that anyone can verify against published keys without calling naulon. Discovery and price quotes are free. Payment settles from your own wallet straight to the author — naulon never holds funds. Humans always read free; only agents are tolled.",
     "developerName": "naulon",
     "category": "Education & Research",
     "capabilities": [
@@ -36,7 +36,7 @@
     "defaultPrompt": [
       "Find tolled sources on <topic>, quote what each costs, and read only the ones worth paying for.",
       "Fact-check this claim against paid sources and cite the licence for every one you used.",
-      "Re-read the sources I already licensed and give me their citations."
+      "Show the proof link for every source you paid for, so I can check it."
     ],
     "brandColor": "#0a7350",
     "composerIcon": "./assets/naulon-mark.svg",
