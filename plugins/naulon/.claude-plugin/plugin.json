@@ -1,6 +1,6 @@
 {
   "name": "naulon",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discover, price, pay for and cite tolled sources. Each paid read returns a Citation License a third party can verify against published keys.",
   "author": {
     "name": "naulon",

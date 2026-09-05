@@ -9,6 +9,14 @@ Humans always read free — only agents are tolled.
 
 ## Install
 
+The server is authenticated, so set your agent token first — mint one at
+[naulon.app/buyer/agents](https://naulon.app/buyer/agents) and export it where your client will
+read it:
+
+```
+export NAULON_AGENT_TOKEN=nln_agent_…
+```
+
 **ChatGPT / Codex** — add this repo as a plugin marketplace, then install `naulon`.
 
 **Claude Code**
@@ -17,8 +25,13 @@ Humans always read free — only agents are tolled.
 /plugin install naulon@naulon
 ```
 
-Both read the same plugin directory. On install you are asked for an agent token — mint one at
-[naulon.app/buyer/agents](https://naulon.app/buyer/agents).
+Both read the same plugin directory. The token travels as `Authorization: Bearer` — Claude Code
+expands it into `headers`, Codex reads `bearer_token_env_var`; both keys name the same variable
+and each ecosystem ignores the other's. Nothing is stored in this repo.
+
+Without the variable set, Claude Code names it in a startup warning and the server answers `401`.
+Discovery and quotes cost nothing, but the token is how the fleet knows who is asking, so every
+tool needs it.
 
 ## Layout
 
@@ -44,6 +57,7 @@ here is self-evidently true, so each row names its upstream.
 | Here | Derives from | Breaks how |
 |---|---|---|
 | `.mcp.json` `url` | the deployed gate mount | a moved mount installs a plugin that cannot connect |
+| `.mcp.json` auth keys | the mount's auth scheme | a mount that needs a bearer and a manifest that supplies none installs a plugin whose client falls back to OAuth discovery and dies on a Cloudflare 502 |
 | plugin `version` | a deliberate release decision | never bump it as a side effect of an edit |
 | tool list implied by the descriptions | what `buildServer()` registers in `@naulon/wayfarer-mcp` | a renamed tool makes the listing lie |
 | `skills/verify-citation-license` | the JWKS path, the `naulon` claim shape, and the `/licenses/:jti` scoping rule | a claim rename makes the instructions wrong, silently |

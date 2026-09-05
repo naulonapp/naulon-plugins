@@ -3,7 +3,8 @@
     "naulon": {
       "type": "http",
       "url": "https://gate.naulon.app/_naulon/mcp",
-      "note": "Discover, quote, pay and cite tolled sources. Bearer auth: an agent token minted at naulon.app/buyer/agents. Payment is settled from the buyer's own wallet — naulon never holds funds."
+      "headers": { "Authorization": "Bearer ${NAULON_AGENT_TOKEN}" },
+      "bearer_token_env_var": "NAULON_AGENT_TOKEN"
     }
   }
 }
