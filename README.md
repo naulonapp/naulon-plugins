@@ -34,10 +34,15 @@ its field is `http_headers` and its values are sent verbatim with no expansion �
 credential travels only on `bearer_token_env_var`. Each ecosystem drops the other's key rather than
 rejecting it. Deleting either one silently breaks that half.
 
-The export is a hard requirement in Codex: an unset or empty variable is a startup error naming the
-variable, because `bearer_token_env_var` turns Codex's OAuth off. In Claude Code it is a named
-startup warning plus a `401`. Discovery and quotes cost nothing, but the token is how the fleet
-knows who is asking, so every tool needs it.
+The export is a hard requirement in Codex, and it fails quietly: with the variable unset the MCP
+server simply does not come up — no prompt, no OAuth fallback (`bearer_token_env_var` turns that
+off), and nothing on screen at the default log level. The reason is in the log, verbatim:
+`MCP startup failed: Environment variable NAULON_AGENT_TOKEN for MCP server 'naulon' is not set`.
+Claude Code is louder: a named startup warning plus a `401`. Either way the fix is the export.
+Discovery and quotes cost nothing, but the token is how the fleet knows who is asking, so every
+tool needs it.
+
+Verified with codex-cli 0.153.4 and Claude Code, against a live gate.
 
 **Already connected by hand?** Claude Code de-duplicates MCP servers by URL, whatever they are
 named. If you previously ran `claude mcp add --transport http naulon https://gate.naulon.app/_naulon/mcp …`
