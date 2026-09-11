@@ -164,8 +164,31 @@ State what you verified and what you did not:
 Do not describe a licence as "verified by naulon". It is verified against published keys, by
 you. That distinction is the reason the artifact is worth anything.
 
-## What this does not prove
+## What a licence grants, and what it does not prove
 
-A licence proves a payment was made and settled for a named resource. It does **not** attest
-that the content is accurate, that the buyer read it, or that the buyer has any right to
-redistribute it. It is a receipt with provenance, not a grant of downstream rights.
+**Read the grant off the token; never infer it.** The `naulon.terms` claim says what the payment
+bought, in RSL 1.0's vocabulary. A per-read toll carries `["ai-input"]`, and paid reads return a
+plain-language `usage` line saying the same thing. When either is present it is the authority.
+
+`ai-input` entitles the holder to read the source, quote it, summarise it, reason over it, and
+**show it to the principal who paid for it**. Showing a buyer the article their own money bought
+is not redistribution and must not be refused as though it were. What it does not grant is public
+republication, and `ai-train` is never sold at all.
+
+Two other things are worth stating plainly, because getting them wrong costs a real person money:
+
+- **A grant of `none` means exactly that.** The permanent citation record verifies perfectly and
+  entitles nothing — it is a proof of payment, not access. Only a licence whose grant resolves to
+  `read` buys a re-read.
+- **Humans read free.** Only agents are tolled. If a person wants the full text, the answer is the
+  source URL, not a refusal and not a second toll.
+
+What a licence does **not** attest: that the content is accurate, or that the buyer actually read
+it. It proves a payment was made and settled for a named resource, and it states the terms that
+payment bought.
+
+> Upstream: `LicenseGrant` and `LicenseTerm` in `@naulon/shared` (`licence-facts.ts`), the grant
+> resolution in `license.ts` (`licenseGrant`), and the toll's default terms in `tollgate/settle.ts`
+> (`DEFAULT_TOLL_TERMS`). If any of those change, this section is wrong until it is changed with
+> them — no test reads prose, and a previous version of this file told agents the licence granted
+> nothing, which is why buyers were refused their own purchases.
