@@ -1,6 +1,6 @@
 ---
 name: verify-citation-license
-description: Use when someone presents a naulon Citation License (a "LICENSE eyJ…" string or a bare JWT) and you need to establish whether a source was really licensed, who was paid, and how much — or when asked to check, audit, or explain a citation's provenance. Verification is offline against published keys; naulon is never called and cannot vouch for itself.
+description: Use when someone presents a naulon Citation License (a "LICENSE eyJ…" string or a bare JWT) and you need to establish whether a source was really licensed, who was paid, and how much, or when asked to check, audit, or explain a citation's provenance. Verification is offline against published keys; naulon is never called and cannot vouch for itself.
 ---
 
 # Verify a Citation License
@@ -8,7 +8,7 @@ description: Use when someone presents a naulon Citation License (a "LICENSE eyJ
 A Citation License (CLT) is a signed statement that a specific source was paid for: which
 resource, how much, which author wallets received it, and the on-chain settlement reference.
 It is an ordinary RFC 7519 JWT signed with **EdDSA / Ed25519**, so any standard library
-verifies it — `jose` in JavaScript, `pyjwt` or `python-jose` in Python. No naulon API call is
+verifies it: `jose` in JavaScript, `pyjwt` or `python-jose` in Python. No naulon API call is
 required, and that is the whole point: a claim you have to ask the issuer about is worth less
 than one you can check yourself.
 
@@ -22,24 +22,24 @@ than one you can check yourself.
 ## Two things people get wrong
 
 **1. `exp` is the re-read window, not the validity of the record.** A licence's lifetime is short
-by design — it is an unrevocable bearer credential, so a short TTL is the kill switch on the
+by design, because it is an unrevocable bearer credential, so a short TTL is the kill switch on the
 offline tier. An expired licence still proves the payment happened. It only stops entitling a
 fresh fetch of the bytes.
 
-So an out-of-window licence is **"issued at T, re-read window closed"** — never "invalid", and
+So an out-of-window licence is **"issued at T, re-read window closed"**, never "invalid", and
 never "this citation is fake". Say it that way.
 
 **2. Two different objects arrive here, and `naulon.grant` tells them apart.**
 
 | | `grant` absent or `"read"` | `grant: "none"` |
 |---|---|---|
-| What it is | an **access licence** — the token an agent presents to re-read | a **citation record** |
-| `exp` | always present; short | **absent — it never expires** |
+| What it is | an **access licence**, the token an agent presents to re-read | a **citation record** |
+| `exp` | always present; short | **absent, it never expires** |
 | Entitles | a free re-read within the window | nothing at all |
 
 A record carrying no `exp` is correct, not malformed: it is permanent precisely *because* it
 grants nothing, so there is nothing to revoke. Never report a missing `exp` on a record as a
-defect, and never treat a record as proof that someone may fetch the bytes — it is proof that a
+defect, and never treat a record as proof that someone may fetch the bytes. It is proof that a
 payment happened, which is the question a citation actually raises.
 
 An **absent** `grant` means `"read"` (every licence minted before records existed). Anything
@@ -57,9 +57,9 @@ Returns a JWKS of `{"kty":"OKP","crv":"Ed25519","alg":"EdDSA","use":"sig","kid":
 Match the token header's `kid`.
 
 If the licence was issued by a self-hosted gate, its `iss` claim names that gate
-(`naulon:<gate host>`) — fetch the JWKS from that host instead.
+(`naulon:<gate host>`), so fetch the JWKS from that host instead.
 
-### 2. Verify the signature — pin the algorithm
+### 2. Verify the signature, pinning the algorithm
 
 ```js
 import { createRemoteJWKSet, jwtVerify } from "jose";
@@ -77,7 +77,7 @@ const { payload } = await jwtVerify(token, JWKS, {
 **Always pass `algorithms`.** Trusting a token's own `alg` header is the classic JWT
 forgery hole, and naulon's own verifier hard-pins Ed25519 for exactly this reason. If you
 need to inspect an expired licence rather than reject it, verify with the expiry check
-disabled and report the timestamps yourself — do not skip the signature check to do it.
+disabled and report the timestamps yourself. Do not skip the signature check to do it.
 
 ### 3. Read the claims
 
@@ -88,18 +88,18 @@ namespaced `naulon` object:
 |---|---|
 | `slug`, `title` | the resource that was licensed |
 | `kind` | which toll was paid |
-| `amount` | **integer micro-USDC as a string** — `"1000"` is $0.001. Never parse as a float. |
+| `amount` | **integer micro-USDC as a string**, so `"1000"` is $0.001. Never parse as a float. |
 | `currency` | always `USDC` |
-| `network` | `{chainId, usdc, gateway}` — the chain it settled on |
+| `network` | `{chainId, usdc, gateway}`, the chain it settled on |
 | `settlementRef` | the on-chain reference |
-| `payees` | the author shares, in `full` payees mode — **the wallets that actually received the money** |
+| `payees` | the author shares, in `full` payees mode: **the wallets that actually received the money** |
 | `payeesHash` / `payTo` | `hashed` mode: a digest plus the advertised primary recipient |
 | `grant` | `"read"` (or absent) = an access licence · `"none"` = a permanent citation record |
 | `scope` | present on a licence covering MANY paths: `{patterns: […]}`, RFC 9309 (`*` crosses segments, trailing `$` anchors). When present it, not `slug`, is what the licence covers. |
-| `terms` | the RSL 1.0 usage terms this executes — `ai-input`, `ai-index`, `search` |
+| `terms` | the RSL 1.0 usage terms this executes: `ai-input`, `ai-index`, `search` |
 | `period` | the purchased period; `until: null` is permanent |
 
-`sub` is the licence's subject — the payer's wallet, or a stable buyer identity when the licence
+`sub` is the licence's subject: the payer's wallet, or a stable buyer identity when the licence
 was issued to an account. It is a provenance claim, not a person: do not treat it as an identity
 you can attribute to a human.
 
@@ -107,7 +107,7 @@ you can attribute to a human.
 holder-of-key bound: re-reading requires a signature from that wallet, so possessing the token
 alone is not enough.
 
-### 4. Optional — cross-check against the ledger, and know its limits
+### 4. Optional: cross-check against the ledger, and know its limits
 
 **The signature check in step 2 is the authority.** This step is corroboration and it is often
 not available. Measured 2026-09-02:
@@ -115,19 +115,19 @@ not available. Measured 2026-09-02:
 | Request | Result |
 |---|---|
 | `https://<publisher host>/licenses/<jti>` | `404` when the publisher serves their own site |
-| `https://gate.naulon.app/licenses/<jti>` with a publisher `Host` header | `403` — spoofing is blocked at the edge |
+| `https://gate.naulon.app/licenses/<jti>` with a publisher `Host` header | `403`, because spoofing is blocked at the edge |
 | `https://gate.naulon.app/licenses/<jti>` | works, but only for licences issued for hosts that gate routes |
 | `https://gate.naulon.app/licenses/<jti>/record?host=<publisher host>` | the permanent citation record for that same settlement. `?host=` names the publisher, which a browser cannot do through `Host`; it is CORS-readable, so a page can fetch it |
 
 The route is scoped by `Host`, and a publisher running the naulon SDK in front of their own app
-is legitimately not in that routing set — so their `/licenses/:jti` is simply not a route on
+is legitimately not in that routing set, so their `/licenses/:jti` is simply not a route on
 their origin. That is the common case, not an edge case.
 
 **Therefore: never read a `404` here as evidence of forgery.** It means "this host does not
 answer that question", which is a statement about routing, not about the licence. A licence whose
 signature verifies against the issuer's published key is proven, full stop.
 
-### 4b. A human can check it too — send the link, not the document
+### 4b. A human can check it too: send the link, not the document
 
 Every tool that returns a `licenseId` also returns a **`proofUrl`**:
 
@@ -136,8 +136,8 @@ https://naulon.app/verify?host=<publisher host>&jti=<licence jti>
 ```
 
 Opening it fetches the citation record from the publisher's gate (their own host first, then
-`gate.naulon.app` with `?host=` naming them) and runs exactly the check in step 2 — the signature
-against the issuer's published keys — in the visitor's own browser, with naulon offline. The
+`gate.naulon.app` with `?host=` naming them) and runs exactly the check in step 2, the signature
+against the issuer's published keys, in the visitor's own browser, with naulon offline. The
 reader sees the author who was paid, the amount and the on-chain settlement.
 
 **Put `proofUrl` beside every citation you emit.** A citation carrying a link a stranger can open
@@ -158,7 +158,7 @@ State what you verified and what you did not:
 - signature valid against key `<kid>` from `<issuer host>`
 - resource, amount (converted from micro-USDC), and the author wallets paid
 - issued at `<iat>`; re-read window closed at `<exp>` if past
-- whether the ledger cross-check ran, what it said, and — if it 404'd — that this is
+- whether the ledger cross-check ran, what it said, and, if it 404'd, that this is
   expected for a self-served publisher and is not a negative result
 
 Do not describe a licence as "verified by naulon". It is verified against published keys, by
@@ -178,7 +178,7 @@ republication, and `ai-train` is never sold at all.
 Two other things are worth stating plainly, because getting them wrong costs a real person money:
 
 - **A grant of `none` means exactly that.** The permanent citation record verifies perfectly and
-  entitles nothing — it is a proof of payment, not access. Only a licence whose grant resolves to
+  entitles nothing. It is a proof of payment, not access. Only a licence whose grant resolves to
   `read` buys a re-read.
 - **Humans read free.** Only agents are tolled. If a person wants the full text, the answer is the
   source URL, not a refusal and not a second toll.
@@ -190,5 +190,5 @@ payment bought.
 > Upstream: `LicenseGrant` and `LicenseTerm` in `@naulon/shared` (`licence-facts.ts`), the grant
 > resolution in `license.ts` (`licenseGrant`), and the toll's default terms in `tollgate/settle.ts`
 > (`DEFAULT_TOLL_TERMS`). If any of those change, this section is wrong until it is changed with
-> them — no test reads prose, and a previous version of this file told agents the licence granted
+> them. No test reads prose, and a previous version of this file told agents the licence granted
 > nothing, which is why buyers were refused their own purchases.
