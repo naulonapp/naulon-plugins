@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How the toll works
+    url: https://naulon.app/docs
+    about: Pricing, the licence an agent receives, and what a publisher sets up.
+  - name: The gate itself
+    url: https://github.com/naulonapp/naulon
+    about: This repo ships manifests only. Bugs in the protocol, the agent or the SDK belong there.

@@ -5,11 +5,11 @@ Distribution for the naulon plugin, in both plugin ecosystems, from one repo.
 naulon lets an agent find sources whose publishers charge for machine reading, see the price
 before committing, pay the author directly, and come away with a **Citation License** that
 anyone can verify against published keys without calling naulon. Discovery and quotes are free.
-Humans always read free — only agents are tolled.
+Humans always read free; only agents are tolled.
 
 ## Install
 
-The server is authenticated, so set your agent token first — mint one at
+The server is authenticated, so set your agent token first. Mint one at
 [naulon.app/buyer/agents](https://naulon.app/buyer/agents) and export it where your client will
 read it:
 
@@ -17,7 +17,7 @@ read it:
 export NAULON_AGENT_TOKEN=nln_agent_…
 ```
 
-**ChatGPT / Codex** — add this repo as a plugin marketplace, then install `naulon`.
+**ChatGPT and Codex.** Add this repo as a plugin marketplace, then install `naulon`.
 
 **Claude Code**
 ```
@@ -25,17 +25,17 @@ export NAULON_AGENT_TOKEN=nln_agent_…
 /plugin install naulon@naulon
 ```
 
-Both read the same plugin directory. Nothing is stored in this repo — the token travels as
+Both read the same plugin directory. Nothing is stored in this repo: the token travels as
 `Authorization: Bearer`, read from your environment at connect time.
 
 `.mcp.json` carries **two** credential keys and both are load-bearing, one per ecosystem. Claude
-Code reads `headers` and expands `${NAULON_AGENT_TOKEN}` inside it. Codex has no `headers` field —
-its field is `http_headers` and its values are sent verbatim with no expansion — so for Codex the
+Code reads `headers` and expands `${NAULON_AGENT_TOKEN}` inside it. Codex has no `headers` field:
+its field is `http_headers` and its values are sent verbatim with no expansion, so for Codex the
 credential travels only on `bearer_token_env_var`. Each ecosystem drops the other's key rather than
 rejecting it. Deleting either one silently breaks that half.
 
 The export is a hard requirement in Codex, and it fails quietly: with the variable unset the MCP
-server simply does not come up — no prompt, no OAuth fallback (`bearer_token_env_var` turns that
+server simply does not come up: no prompt, no OAuth fallback (`bearer_token_env_var` turns that
 off), and nothing on screen at the default log level. The reason is in the log, verbatim:
 `MCP startup failed: Environment variable NAULON_AGENT_TOKEN for MCP server 'naulon' is not set`.
 Claude Code is louder: a named startup warning plus a `401`. Either way the fix is the export.
@@ -46,7 +46,7 @@ Verified with codex-cli 0.153.4 and Claude Code, against a live gate.
 
 **Already connected by hand?** Claude Code de-duplicates MCP servers by URL, whatever they are
 named. If you previously ran `claude mcp add --transport http naulon https://gate.naulon.app/_naulon/mcp …`
-that server wins and this plugin's server is silently suppressed — you are not missing anything,
+that server wins and this plugin's server is silently suppressed. You are not missing anything,
 but you are also not gaining anything. Remove the hand-added one (`claude mcp remove naulon`) if
 you would rather the plugin owned it.
 
@@ -88,8 +88,8 @@ first three rows: `.claude/rules/plugin-marketplace-sync.md` in `naulon-cloud`.
 
 Every paid read returns a Citation License: an RFC 7519 JWT signed EdDSA/Ed25519. Verify it
 with stock `jose` or `pyjwt` against
-[`/.well-known/naulon-jwks.json`](https://gate.naulon.app/.well-known/naulon-jwks.json) — no
-naulon API call, no account. The bundled `verify-citation-license` skill walks it, including
+[`/.well-known/naulon-jwks.json`](https://gate.naulon.app/.well-known/naulon-jwks.json), with no
+naulon API call and no account. The bundled `verify-citation-license` skill walks it, including
 the part people get wrong: `exp` is the re-read window, not the validity of the record.
 
 ## Custody
@@ -98,4 +98,4 @@ Payment settles from the buyer's own wallet straight to the author. naulon never
 
 ## Licence
 
-MIT — see [LICENSE](./LICENSE).
+MIT. See [LICENSE](./LICENSE).

@@ -1,0 +1,60 @@
+name: The plugin will not connect
+description: You installed it and the tools never appear, or every call is refused.
+labels: ["connection"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Three known causes account for almost every report, and two of them fail silently. Check
+        them before filling this in; each takes under a minute.
+
+  - type: dropdown
+    id: client
+    attributes:
+      label: Which client
+      options:
+        - Claude Code
+        - Codex or ChatGPT
+        - Another MCP client
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: known-causes
+    attributes:
+      label: The three known causes
+      options:
+        - label: >
+            `NAULON_AGENT_TOKEN` is exported in the shell that starts the client. In Codex this is a
+            hard prerequisite that fails with no prompt, no login flow and no 401: the server simply
+            never comes up, and the reason appears only at WARN level.
+        - label: >
+            No MCP server is already configured at the same URL. Claude Code de-duplicates by URL
+            whatever the server is named, so a server you added by hand silently suppresses the
+            plugin's. `claude mcp list` shows it; `claude mcp remove naulon` clears it.
+        - label: >
+            The token is current and not revoked. Mint one at https://naulon.app/buyer/agents and
+            check that its `last_used_at` moves after a call.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What you saw
+      description: The exact message, if there is one. A Cloudflare error page is worth saying so.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Client log at WARN or higher
+      description: This is where a silent MCP startup failure states its reason. Rendered as code.
+      render: shell
+
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before you post
+      options:
+        - label: I have removed my agent token from the text above.
+          required: true
