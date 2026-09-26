@@ -81,8 +81,8 @@ here is self-evidently true, so each row names its upstream.
 | `privacyPolicyURL`, `termsOfServiceURL`, `websiteURL` | live pages on naulon.app | a 404 fails plugin review |
 | `brandColor`, `logo`, `composerIcon` | the portal brand kit | drifts from the product's look |
 
-The control plane carries the rule that governs this repo and the test that enforces the
-first three rows: `.claude/rules/plugin-marketplace-sync.md` in `naulon-cloud`.
+The rule that governs this repo, and the test that enforces the first three rows, live in the
+private source of the hosted service.
 
 ## Verification, without trusting us
 

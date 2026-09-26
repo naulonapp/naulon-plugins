@@ -69,7 +69,7 @@ const JWKS = createRemoteJWKSet(
 );
 
 const { payload } = await jwtVerify(token, JWKS, {
-  algorithms: ["EdDSA"],          // REQUIRED — never let the token pick
+  algorithms: ["EdDSA"],          // REQUIRED, never let the token pick
   clockTolerance: 60,
 });
 ```
@@ -96,7 +96,7 @@ namespaced `naulon` object:
 | `payeesHash` / `payTo` | `hashed` mode: a digest plus the advertised primary recipient |
 | `grant` | `"read"` (or absent) = an access licence · `"none"` = a permanent citation record |
 | `scope` | present on a licence covering MANY paths: `{patterns: […]}`, RFC 9309 (`*` crosses segments, trailing `$` anchors). When present it, not `slug`, is what the licence covers. |
-| `terms` | the RSL 1.0 usage terms this executes: `ai-input`, `ai-index`, `search` |
+| `terms` | the RSL 1.0 usage terms this executes: `ai-input`, `ai-index`, `search`, `ai-train` |
 | `period` | the purchased period; `until: null` is permanent |
 
 `sub` is the licence's subject: the payer's wallet, or a stable buyer identity when the licence
@@ -172,8 +172,14 @@ plain-language `usage` line saying the same thing. When either is present it is 
 
 `ai-input` entitles the holder to read the source, quote it, summarise it, reason over it, and
 **show it to the principal who paid for it**. Showing a buyer the article their own money bought
-is not redistribution and must not be refused as though it were. What it does not grant is public
-republication, and `ai-train` is never sold at all.
+is not redistribution and must not be refused as though it were. What no licence grants is public
+republication.
+
+`ai-train` is never on sale through the self-serve rail, which refuses it by name. A licence that
+carries it is the record of an agreement made with the publisher directly, and it means what it
+says: that holder may use the text as training data. Read it off the claim like every other term.
+Assuming training is always forbidden would refuse a right somebody negotiated and paid for, and
+assuming it is granted because the word appears somewhere would do the opposite.
 
 Two other things are worth stating plainly, because getting them wrong costs a real person money:
 
