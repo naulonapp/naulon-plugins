@@ -69,7 +69,7 @@ const JWKS = createRemoteJWKSet(
 );
 
 const { payload } = await jwtVerify(token, JWKS, {
-  algorithms: ["EdDSA"],          // REQUIRED — never let the token pick
+  algorithms: ["EdDSA"],          // REQUIRED, never let the token pick
   clockTolerance: 60,
 });
 ```
