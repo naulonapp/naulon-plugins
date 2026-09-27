@@ -91,13 +91,37 @@ namespaced `naulon` object:
 | `amount` | **integer micro-USDC as a string**, so `"1000"` is $0.001. Never parse as a float. |
 | `currency` | always `USDC` |
 | `network` | `{chainId, usdc, gateway}`, the chain it settled on |
-| `settlementRef` | the on-chain reference |
+| `settlementRef` | the settlement rail's reference. On the Gateway rail this is Circle's transfer id, **not** a transaction hash; the hash comes from `evidence` below |
 | `payees` | the author shares, in `full` payees mode: **the wallets that actually received the money** |
 | `payeesHash` / `payTo` | `hashed` mode: a digest plus the advertised primary recipient |
 | `grant` | `"read"` (or absent) = an access licence · `"none"` = a permanent citation record |
 | `scope` | present on a licence covering MANY paths: `{patterns: […]}`, RFC 9309 (`*` crosses segments, trailing `$` anchors). When present it, not `slug`, is what the licence covers. |
 | `terms` | the RSL 1.0 usage terms this executes: `ai-input`, `ai-index`, `search`, `ai-train` |
 | `period` | the purchased period; `until: null` is permanent |
+| `resource` | the URL that was bought |
+| `contentSha256` | sha256 (hex) of the exact body the gate served; hash a held copy and compare |
+| `termsDocument` | `{url, sha256}`: the RSL document in force at the sale. A mismatch today means the terms changed since, not that the record is wrong |
+| `evidence` | the buyer's own EIP-3009 authorization for the author leg: `domain`, `authorization`, `signature` |
+
+Every field in that last block is absent on older records and on the mock rail. Absent is "not
+stated", never a failed check.
+
+### Checking `evidence` without trusting the issuer
+
+The issuer's signature proves the issuer vouches for the record. `evidence` is the part the issuer
+did not write:
+
+1. Recover the signer from `signature` over `domain` and `authorization` as EIP-712
+   `TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)`.
+   It must equal `authorization.from`, and that must equal `sub` when `sub` is an address.
+2. `authorization.to` must be a wallet in `payees` (or `payTo`), and `value` must be positive and
+   no more than `amount`.
+3. Ask the rail what became of it. The nonce is unique per payment, and Circle's Gateway API answers
+   by nonce with no key:
+   `GET https://gateway-api.circle.com/v1/x402/transfers?network=eip155:<chainId>&nonce=<nonce>`
+   (`gateway-api-testnet.circle.com` for a testnet). A `completed` transfer whose `fromAddress`,
+   `toAddress` and `amount` match carries the `txHash` of the batch it settled in. A pending status
+   is not a failure; a transfer under that nonce with a different payer, payee or amount is.
 
 `sub` is the licence's subject: the payer's wallet, or a stable buyer identity when the licence
 was issued to an account. It is a provenance claim, not a person: do not treat it as an identity
