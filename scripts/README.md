@@ -9,3 +9,4 @@ A fresh clone has no hooks until `core.hooksPath` points at the tracked director
 ```bash
 git config core.hooksPath .githooks
 ```
+`check-version-bump.sh` is what CI runs on a pull request touching `plugins/`: a change there without a version bump in both manifests never reaches an installed copy, so it fails.
