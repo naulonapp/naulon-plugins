@@ -15,5 +15,7 @@ installs; if none are available, say the naulon server is not connected and stop
 3. Only if the verdict needs it, pay the most relevant sources with `naulon_pay_and_read`.
 4. State SUPPORTED, REFUTED or UNVERIFIABLE. Cite each paid source by title with its `proofUrl`,
    report the spend, and keep the sources' evidence separate from your own general knowledge.
+   Quote the passage that decides the verdict word for word, and link it as `proofUrl` followed by
+   `#quote=` and that passage, percent-encoded, so the reader can confirm it is in the source.
 
 To check a licence someone else presents, use the `verify-citation-license` skill instead.
