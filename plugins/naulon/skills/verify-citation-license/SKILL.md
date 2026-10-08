@@ -168,6 +168,18 @@ reader sees the author who was paid, the amount and the on-chain settlement.
 is worth more than one carrying an id they cannot. If you only hold a licence and no link, build
 one: `host` is the `iss` claim with its `naulon:` prefix removed, `jti` is the `jti` claim.
 
+**When you quote the source word for word, put the quote on the link.** Append `#quote=` and the
+exact words you quoted, percent-encoded, at most 1000 characters:
+
+```
+https://naulon.app/verify?host=example.com&jti=abc#quote=two%20horns%20and%20a%20disk
+```
+
+The page checks that passage against the text the licence paid for as soon as it opens, so the
+reader sees whether the quote is really in the source without pasting anything. The quote sits
+after `#`, which a browser never sends to a server. Leave it off a paraphrase or a summary: the
+check compares words, and would report reworded text as missing.
+
 The page also takes a pasted licence, for the case where someone hands you the document itself.
 Nothing pasted there is sent anywhere.
 
