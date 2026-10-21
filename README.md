@@ -9,17 +9,9 @@ Humans always read free; only agents are tolled.
 
 ## Install
 
-### 1. Set your agent token
-
-Every tool needs it, free ones included: the token is how the server knows who is asking. Mint one
-at [naulon.app/buyer/agents](https://naulon.app/buyer/agents), then add this line to `~/.zshrc` or
-`~/.bashrc` so every new terminal has it:
-
-```bash
-export NAULON_AGENT_TOKEN=nln_agent_…
-```
-
-### 2. Add the plugin
+Mint an agent token at [naulon.app/buyer/agents](https://naulon.app/buyer/agents). Every tool needs
+it, free ones included: the token is how the server knows who is asking, and it carries the spending
+cap you set.
 
 **Claude Code**
 
@@ -28,9 +20,18 @@ export NAULON_AGENT_TOKEN=nln_agent_…
 /plugin install naulon@naulon
 ```
 
-**Codex CLI**
+Claude Code asks for the token when you enable the plugin and keeps it in your system's secure
+credential store. To set or change it later, run `/plugin configure naulon@naulon`. From a script:
 
 ```bash
+claude plugin install naulon@naulon --config NAULON_AGENT_TOKEN=nln_agent_…
+```
+
+**Codex CLI.** Codex reads the token from your environment, so add this line to `~/.zshrc` or
+`~/.bashrc` first:
+
+```bash
+export NAULON_AGENT_TOKEN=nln_agent_…
 codex plugin marketplace add naulonapp/naulon-plugins
 ```
 
@@ -45,7 +46,8 @@ naulon is not in the public Plugins Directory yet, so an individual account cann
 - **Codex fails silently without the token.** The server does not start, and nothing says so at
   the default log level. The log line is
   `MCP startup failed: Environment variable NAULON_AGENT_TOKEN for MCP server 'naulon' is not set`.
-- **Claude Code** shows a startup warning and a `401`.
+- **Claude Code without a token** does not start the server, so no naulon tool appears.
+  `/plugin configure naulon@naulon` sets it.
 - **A rejected token removes every tool**, so a missing tool usually means a revoked or mistyped
   token. Once connected, `naulon_status` says what is wrong.
 - **Already connected by hand?** Claude Code de-duplicates MCP servers by URL, whatever they are
@@ -60,6 +62,10 @@ naulon is not in the public Plugins Directory yet, so an individual account cann
 
 An installed copy only changes when the plugin's `version` does, and neither client updates a
 third-party marketplace on its own.
+
+**Updating Claude Code to 0.1.8 or later from an earlier version:** the plugin now takes the token
+from its own setting instead of `NAULON_AGENT_TOKEN`, so run `/plugin configure naulon@naulon` once
+after updating. Codex still reads the environment variable.
 
 ```bash
 # Claude Code (or turn on auto-update for this marketplace under /plugin, Marketplaces tab)
