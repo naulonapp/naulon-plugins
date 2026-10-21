@@ -22,7 +22,14 @@ plugins/naulon/
   .mcp.json                           the hosted MCP server
   skills/                             shared by both ecosystems
   assets/                             listing icon + composer icon
+chatgpt/                              the ChatGPT Plugins Directory package (free, read-only)
 ```
+
+`chatgpt/` is not in either marketplace. It is the upload for OpenAI's directory, which does not
+accept tools that move money, so it connects the anonymous mount `/_naulon/mcp/public` with no
+credential and skills that use only that mount's tools. Build the ZIP with
+`scripts/package-chatgpt.sh`; its listing text, review cases and release notes live in its
+`.codex-plugin/plugin.json`. It has its own version, raised for each upload.
 
 Two manifest dialects, one plugin. Adding, renaming or removing anything means editing **both**
 marketplaces and **both** `plugin.json` files in the same commit.
@@ -62,6 +69,7 @@ Everything here derives from something that lives elsewhere.
 | plugin `version` | a deliberate release decision | an unbumped change never reaches an installed copy |
 | the tools table in `README.md` | what the hosted server registers | a renamed tool makes the README lie |
 | `plugins/naulon/README.md` | what the plugin runs, sends and connects to | the directory's security scan rejects behaviour the README does not disclose |
+| `chatgpt/` listing and review cases | the tools the public mount serves (`PUBLIC_TOOLS`, `PUBLIC_CLOUD_TOOLS`) and OpenAI's listing limits | a case naming a tool the mount lacks fails review; an over-long field fails the upload |
 | `skills/*` | the hosted server's tool names, arguments and result fields | a renamed tool or field makes a skill call something that does not exist |
 | `skills/verify-citation-license` | the JWKS path, the `naulon` claim shape, and the `/licenses/:jti` scoping rule | a claim rename makes the instructions wrong, silently |
 | `privacyPolicyURL`, `privacyPolicyUrl`, `termsOfServiceURL`, `termsOfServiceUrl`, `documentationUrl`, `supportUrl`, `websiteURL` | live pages | a 404 fails plugin review |
