@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "naulon": {
+      "url": "https://gate.naulon.app/_naulon/mcp/public",
+      "extensions": {
+        "com.openai": {
+          "auth": { "type": "none" }
+        }
+      }
+    }
+  }
+}

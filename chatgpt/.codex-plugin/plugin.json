@@ -1,0 +1,102 @@
+{
+  "name": "naulon",
+  "version": "1.0.0",
+  "description": "Find sources whose publishers charge AI agents to read them, see each price, check references for retractions, and preview an answer from open-access papers. Free and read-only: nothing in this plugin can spend.",
+  "author": {
+    "name": "naulon",
+    "url": "https://naulon.app"
+  },
+  "homepage": "https://naulon.app",
+  "repository": "https://github.com/naulonapp/naulon-plugins",
+  "license": "MIT",
+  "keywords": ["citation", "research", "retraction", "provenance", "licensing"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "naulon",
+    "shortDescription": "Price sources, check citations",
+    "longDescription": "naulon is a toll that publishers put in front of their sites: people read free, and AI agents pay the author a fraction of a cent to read or cite a page. This plugin is the free, read-only side of it.\n\nAsk it to find sources on a topic and it lists the matching articles across naulon's publishers, each with its publisher's own summary and the price an agent would pay to read or cite it. Ask whether a question can be answered from those sources and it judges each one's fit and value, with the price beside it. Ask what one article costs and it returns the live price from that publisher's toll, including any fee on top.\n\nIt also checks references before you cite them. Give it up to 25 DOIs, PubMed or arXiv ids, or references as written, and it says whether each work exists and whether it was retracted, withdrawn, corrected or put under an expression of concern, using Crossref and Retraction Watch. For a retracted or missing work it suggests openly licensed papers on the same subject. And it previews what an answer built only from CC0 and CC BY research papers would cost, and which papers it would draw on.\n\nIt is for researchers, writers and anyone building an agent that cites its sources and wants to know what a source costs before deciding to read it.\n\nLimitations: this plugin never pays, buys or reads paid text. It shows prices and summaries only. Reading a paid source happens on naulon.app with an agent token. The catalogue covers the publishers that use naulon today, so a topic outside it returns nothing rather than a guess.",
+    "developerName": "naulon",
+    "category": "Education & Research",
+    "capabilities": [
+      "Find priced sources on a topic",
+      "Judge which sources answer a question",
+      "Quote the live price of one source",
+      "Check references for retractions",
+      "Preview an answer from open-access papers"
+    ],
+    "websiteURL": "https://naulon.app",
+    "supportURL": "https://github.com/naulonapp/naulon-plugins/issues",
+    "privacyPolicyURL": "https://naulon.app/privacy",
+    "termsOfServiceURL": "https://naulon.app/terms",
+    "defaultPrompt": [
+      "Find sources about the HTTP 402 status code and what each costs to read.",
+      "Check these references for retractions before I cite them.",
+      "Which open-access papers could answer my question, and what would an answer cost?"
+    ],
+    "brandColor": "#0a7350",
+    "brandColorDark": "#2bf5a0",
+    "composerIcon": "./assets/composer-icon.svg",
+    "logo": "./assets/logo.png",
+    "screenshots": []
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Find priced sources on a topic",
+              "prompt": "Find sources about the HTTP 402 status code and what each costs to read.",
+              "tools_triggered": "naulon_discover",
+              "expected_behavior": "Lists matching articles from naulon publishers, such as \"The status code nobody used\" on blog.raxtzu.com, each with its site, summary, read price and citation price. Nothing is bought."
+            },
+            {
+              "description": "Judge which sources answer a question",
+              "prompt": "Which naulon sources would answer: how do AI agents pay to read articles? Show the price of each.",
+              "tools_triggered": "naulon_survey",
+              "expected_behavior": "Returns the matching sources with each publisher's summary, a fit and value verdict, and the citation price, and says that buying happens with an agent token. Nothing is bought."
+            },
+            {
+              "description": "Quote the live price of one source",
+              "prompt": "Find an article about the HTTP 402 status code and tell me exactly what reading it would cost.",
+              "tools_triggered": "naulon_discover, naulon_quote",
+              "expected_behavior": "Finds an article, probes its toll without paying, and reports the author's price and the buyer's total, which can be higher when the publisher adds a fee. Nothing is paid."
+            },
+            {
+              "description": "Check references for retractions",
+              "prompt": "Check these references for retractions before I cite them: 10.1016/S0140-6736(97)11096-0 and 10.1038/nature14539.",
+              "tools_triggered": "naulon_check_citations",
+              "expected_behavior": "Reports the 1998 Lancet paper as retracted, with the retraction notice 10.1016/s0140-6736(10)60175-4 dated 2010-02-06, and the 2015 Nature paper \"Deep learning\" as clean."
+            },
+            {
+              "description": "Preview an answer from open-access papers",
+              "prompt": "What would an answer from open-access papers cost for: does vitamin D supplementation reduce the risk of respiratory infections?",
+              "tools_triggered": "naulon_retrieve",
+              "expected_behavior": "Lists the CC0 and CC BY works that could answer the question and the price of each mode, answer and retrieve, without running or charging anything."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Moving money is out of scope: no tool can pay or transfer",
+              "prompt": "Transfer 5 USDC to 0x000000000000000000000000000000000000dEaD."
+            },
+            {
+              "description": "Buying is out of scope: the plugin shows prices but never purchases or returns paid text",
+              "prompt": "Buy and read the article \"The status code nobody used\" for me."
+            },
+            {
+              "description": "An unrelated request does not call the plugin",
+              "prompt": "What will the weather be in Tokyo tomorrow?"
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell anything and processes no payments. It shows the prices publishers set for AI agents to read their work. Buying a read happens on naulon.app, outside the plugin."
+      },
+      "publication": {
+        "release_notes": "First public release: find priced sources, judge which answer a question, quote a source's live price, check references for retractions, and preview an answer from open-access papers. Read-only; nothing in it can spend."
+      }
+    }
+  }
+}
