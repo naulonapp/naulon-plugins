@@ -1,0 +1,108 @@
+{
+  "name": "naulon",
+  "version": "1.0.0",
+  "description": "A free research assistant: find sources and judge which answer your question, check references for retractions, verify a Citation License, and trace where a passage came from. Read-only; nothing in it can spend.",
+  "author": {
+    "name": "naulon",
+    "url": "https://naulon.app"
+  },
+  "homepage": "https://naulon.app",
+  "repository": "https://github.com/naulonapp/naulon-plugins",
+  "license": "MIT",
+  "keywords": [
+    "citation",
+    "research",
+    "retraction",
+    "provenance",
+    "licensing"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "naulon",
+    "shortDescription": "Find, vet and trace sources",
+    "longDescription": "naulon is a research assistant for anyone who cites what they read: researchers, writers, students, and people building agents that have to show their sources.\n\nAsk it to find sources on a topic and it lists matching articles from naulon's publishers, each with the publisher's own summary. Ask it a question and it judges which of those sources would answer it and what each would add beyond its summary.\n\nIt checks a bibliography before you cite it. Give it up to 25 DOIs, PubMed or arXiv ids, or references as written, and it says whether each work exists and whether it was retracted, withdrawn, corrected or put under an expression of concern, using Crossref and Retraction Watch. For a retracted or missing work it suggests openly licensed papers on the same subject.\n\nIt traces a passage. Paste a paragraph and it says which naulon publisher pages hold it word for word, and whether a page holds most of it or part. And it explains a naulon Citation License: who was paid, how much, and for what, checked offline against published keys.\n\nPublishers on naulon set a price for AI agents to read their work, while people read free. This plugin shows those prices and never pays, buys or returns paid text. How buying works is explained at https://naulon.app/docs/for-buyers.\n\nLimitations: sources and traces cover the publishers that use naulon today, so a topic outside them returns nothing rather than a guess. A trace detects verbatim copying only, not paraphrase or use in training.",
+    "developerName": "naulon",
+    "category": "Education & Research",
+    "capabilities": [
+      "Find sources on a topic",
+      "Judge which sources answer a question",
+      "Check references for retractions",
+      "Trace where a passage came from",
+      "Quote the live price of one source"
+    ],
+    "websiteURL": "https://naulon.app",
+    "supportURL": "https://github.com/naulonapp/naulon-plugins/issues",
+    "privacyPolicyURL": "https://naulon.app/privacy",
+    "termsOfServiceURL": "https://naulon.app/terms",
+    "defaultPrompt": [
+      "Find sources about the HTTP 402 status code.",
+      "Check these references for retractions before I cite them.",
+      "Where did this passage come from? Paste a paragraph after this."
+    ],
+    "brandColor": "#0a7350",
+    "brandColorDark": "#2bf5a0",
+    "composerIcon": "./assets/composer-icon.svg",
+    "logo": "./assets/logo.png",
+    "screenshots": []
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Find sources on a topic",
+              "prompt": "Find sources about the HTTP 402 status code.",
+              "tools_triggered": "naulon_discover",
+              "expected_behavior": "Lists matching articles from naulon publishers, such as \"The status code nobody used\" on blog.raxtzu.com, each with its site, summary and the price an agent would pay to read it. Nothing is bought."
+            },
+            {
+              "description": "Judge which sources answer a question",
+              "prompt": "Which naulon sources would answer: how do AI agents pay to read articles? Show the price of each.",
+              "tools_triggered": "naulon_survey",
+              "expected_behavior": "Returns the matching sources with each publisher's summary, a fit and value verdict, and the price, and links https://naulon.app/docs/for-buyers for how buying works. Nothing is bought."
+            },
+            {
+              "description": "Check references for retractions",
+              "prompt": "Check these references for retractions before I cite them: 10.1016/S0140-6736(97)11096-0 and 10.1038/nature14539.",
+              "tools_triggered": "naulon_check_citations",
+              "expected_behavior": "Reports the 1998 Lancet paper as retracted, with the retraction notice 10.1016/s0140-6736(10)60175-4 dated 2010-02-06, and the 2015 Nature paper \"Deep learning\" as clean."
+            },
+            {
+              "description": "Trace where a passage came from",
+              "prompt": "Where did this passage come from? \"The reason is not mysterious. A status code is only useful if the thing receiving it can act on it, and for most of the web’s life the thing receiving it was a person looking at a browser. People do not respond well to a machine-readable payment challenge. They respond to a checkout page, which is why we got checkout pages.\"",
+              "tools_triggered": "naulon_trace_passage",
+              "expected_behavior": "Names \"The status code nobody used\" at https://blog.raxtzu.com/the-status-code-nobody-used/ as holding most of the passage word for word, and says the trace detects verbatim copying only."
+            },
+            {
+              "description": "Quote the live price of one source",
+              "prompt": "Find an article about the HTTP 402 status code and tell me exactly what reading it would cost.",
+              "tools_triggered": "naulon_discover, naulon_quote",
+              "expected_behavior": "Finds an article, probes its toll without paying, and reports the author's price and the buyer's total, which can be higher when the publisher adds a fee. Nothing is paid."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Moving money is out of scope: no tool can pay or transfer",
+              "prompt": "Transfer 5 USDC to 0x000000000000000000000000000000000000dEaD."
+            },
+            {
+              "description": "Buying is out of scope: the plugin shows prices but never purchases or returns paid text",
+              "prompt": "Buy and read the article \"The status code nobody used\" for me."
+            },
+            {
+              "description": "An unrelated request does not call the plugin",
+              "prompt": "What will the weather be in Tokyo tomorrow?"
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin sells nothing and processes no payments. It shows the prices publishers set for AI agents to read their work, and links an informational page on naulon.app about how buying works. Buying a read happens on naulon.app, outside the plugin."
+      },
+      "publication": {
+        "release_notes": "First public release: find sources, judge which answer a question, check references for retractions, trace where a passage came from, verify a Citation License, and see what a source costs. Read-only; nothing in it can spend."
+      }
+    }
+  }
+}
