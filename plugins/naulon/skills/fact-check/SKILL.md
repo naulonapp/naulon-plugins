@@ -10,12 +10,18 @@ Check the claim the user gave (`$ARGUMENTS` when run as a command). The tools co
 installs; if none are available, say the naulon server is not connected and stop.
 
 1. Call `naulon_status`. If `ready` is false, relay its `nextStep` and stop.
-2. Find relevant sources with `naulon_discover`, then use `naulon_appraise` and `naulon_quote`
+2. If the claim comes with references (a DOI, PMID, PMCID, arXiv id or a written citation), pass
+   them to `naulon_check_citations` first. It is free. A retracted or withdrawn work does not
+   support the claim, whatever it says, so report that before anything else.
+3. Find relevant sources with `naulon_discover`, then use `naulon_appraise` and `naulon_quote`
    (both free) to see relevance and price.
-3. Only if the verdict needs it, pay the most relevant sources with `naulon_pay_and_read`.
-4. State SUPPORTED, REFUTED or UNVERIFIABLE. Cite each paid source by title with its `proofUrl`,
+4. Only if the verdict needs it, pay the most relevant sources with `naulon_pay_and_read`.
+5. State SUPPORTED, REFUTED or UNVERIFIABLE. Cite each paid source by title with its `proofUrl`,
    report the spend, and keep the sources' evidence separate from your own general knowledge.
    Quote the passage that decides the verdict word for word, and link it as `proofUrl` followed by
    `#quote=` and that passage, percent-encoded, so the reader can confirm it is in the source.
 
-To check a licence someone else presents, use the `verify-citation-license` skill instead.
+A read whose `settlementRefKind` is `mock` moved no money. Never call it a payment.
+
+To check a licence someone else presents, use the `verify-citation-license` skill instead. To
+check a reference list without a claim attached, use `check-citations`.

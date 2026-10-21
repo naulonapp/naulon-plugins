@@ -1,6 +1,6 @@
 {
   "name": "naulon",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Discover, price, pay for and cite tolled sources. Each paid read returns a Citation License a third party can verify against published keys.",
   "author": {
     "name": "naulon",
@@ -40,7 +40,7 @@
     ],
     "brandColor": "#0a7350",
     "composerIcon": "./assets/naulon-mark.svg",
-    "logo": "./assets/naulon-mark-512.png",
+    "logo": "./assets/naulon-tile-512.png",
     "screenshots": []
   }
 }
