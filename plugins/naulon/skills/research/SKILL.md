@@ -9,10 +9,12 @@ argument-hint: "<topic>"
 Research the topic the user gave (`$ARGUMENTS` when run as a command). The tools come from the hosted naulon MCP server this plugin installs; if
 none are available, say the naulon server is not connected and stop.
 
-1. Call `naulon_status`. If `ready` is false, relay its `nextStep` and stop.
+1. Call `naulon_status` and keep its `ready` and `nextStep`. Steps 2 and 3 are free and run either
+   way.
 2. Call `naulon_discover` with the topic. It is free and lists candidates with teaser prices.
 3. Use `naulon_appraise` and `naulon_quote`, both free, to judge relevance and see exact prices.
-4. Pay only the sources worth it with `naulon_pay_and_read`, or call `naulon_research` to run the
+4. If `ready` was false, report what discovery and the quotes found, relay `nextStep`, and stop.
+   Otherwise pay only the sources worth it with `naulon_pay_and_read`, or call `naulon_research` to run the
    whole loop within the session budget. `naulon_pay_and_read` serves a licence you already hold
    for free, so re-reading a source never pays twice.
 5. Return a grounded answer with numbered citations, each with its `proofUrl`, and the exact

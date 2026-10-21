@@ -9,13 +9,16 @@ argument-hint: "<claim>"
 Check the claim the user gave (`$ARGUMENTS` when run as a command). The tools come from the hosted naulon MCP server this plugin
 installs; if none are available, say the naulon server is not connected and stop.
 
-1. Call `naulon_status`. If `ready` is false, relay its `nextStep` and stop.
+1. Call `naulon_status` and keep its `ready` and `nextStep`. Steps 2 and 3 are free and run either
+   way.
 2. If the claim comes with references (a DOI, PMID, PMCID, arXiv id or a written citation), pass
    them to `naulon_check_citations` first. It is free. A retracted or withdrawn work does not
    support the claim, whatever it says, so report that before anything else.
 3. Find relevant sources with `naulon_discover`, then use `naulon_appraise` and `naulon_quote`
    (both free) to see relevance and price.
-4. Only if the verdict needs it, pay the most relevant sources with `naulon_pay_and_read`.
+4. Only if the verdict needs it, pay the most relevant sources with `naulon_pay_and_read`. If it
+   needs a paid read and `ready` was false, give UNVERIFIABLE with what the free steps found, and
+   relay `nextStep`.
 5. State SUPPORTED, REFUTED or UNVERIFIABLE. Cite each paid source by title with its `proofUrl`,
    report the spend, and keep the sources' evidence separate from your own general knowledge.
    Quote the passage that decides the verdict word for word, and link it as `proofUrl` followed by
