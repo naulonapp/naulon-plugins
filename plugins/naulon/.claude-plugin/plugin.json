@@ -1,6 +1,6 @@
 {
   "name": "naulon",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Discover, price, pay for and cite tolled sources. Each paid read returns a Citation License a third party can verify against published keys.",
   "author": {
     "name": "naulon",
@@ -11,6 +11,9 @@
   "license": "MIT",
   "icon": "./assets/naulon-tile-512.png",
   "privacyPolicyUrl": "https://naulon.app/privacy",
+  "termsOfServiceUrl": "https://naulon.app/terms",
+  "documentationUrl": "https://naulon.app/docs/for-buyers",
+  "supportUrl": "https://github.com/naulonapp/naulon-plugins/issues",
   "keywords": [
     "citation",
     "licensing",
@@ -20,5 +23,14 @@
     "micropayments",
     "provenance",
     "attribution"
-  ]
+  ],
+  "userConfig": {
+    "NAULON_AGENT_TOKEN": {
+      "type": "string",
+      "title": "naulon agent token",
+      "description": "An agent token from naulon.app/buyer/agents, starting nln_agent_. It sets what this agent may spend, and you can revoke it there at any time.",
+      "sensitive": true,
+      "required": true
+    }
+  }
 }

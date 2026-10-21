@@ -3,7 +3,7 @@
     "naulon": {
       "type": "http",
       "url": "https://gate.naulon.app/_naulon/mcp",
-      "headers": { "Authorization": "Bearer ${NAULON_AGENT_TOKEN}" },
+      "headers": { "Authorization": "Bearer ${user_config.NAULON_AGENT_TOKEN}" },
       "bearer_token_env_var": "NAULON_AGENT_TOKEN"
     }
   }
