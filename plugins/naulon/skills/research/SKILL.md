@@ -20,3 +20,5 @@ none are available, say the naulon server is not connected and stop.
 
 If a re-read fails with `refused_by_publisher`, the licence was valid and the publisher rejected
 it. Report that; paying again can charge twice without fixing anything.
+
+A read whose `settlementRefKind` is `mock` moved no money. Never call it a payment.

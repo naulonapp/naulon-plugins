@@ -24,5 +24,5 @@ connected and stop.
    reached.
 
 A source that costs 0 because a licence is already held was paid for earlier: say it was already
-licensed, not that it was free. Never describe a result with `settlementRefKind: "mock"` as a
-payment: no money moved.
+licensed, not that it was free. A `settlementRef` that starts with `mock-` is test data: no money
+moved, so never call it a payment.
