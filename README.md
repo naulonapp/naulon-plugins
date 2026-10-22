@@ -99,8 +99,10 @@ The hosted server at `https://gate.naulon.app/_naulon/mcp`:
 | `naulon_discover` | candidate sources for a topic, with teaser and citation prices | no |
 | `naulon_appraise` | how relevant each candidate is, from its teaser | no |
 | `naulon_quote` | the exact price and terms for one source | no |
-| `naulon_survey` | every source matching a question, priced, with a signed quote | no |
-| `naulon_ask` | buys the sources you chose from a survey and answers from them | yes |
+| `naulon_search` | every source matching a question, priced, with a signed quote | no |
+| `naulon_read` | buys the sources you chose from a search and returns their own text | yes |
+| `naulon_answer` | the same, and naulon writes a cited answer over them | yes |
+| `naulon_survey`, `naulon_ask` | the older names for `naulon_search` and `naulon_read` (`naulon_ask` with `write: true` is `naulon_answer`) | as above |
 | `naulon_pay_and_read` | pays for one source and returns its text and licence | yes |
 | `naulon_read_held` | re-reads a source you already hold a licence for | no |
 | `naulon_research` | runs discover, appraise and pay in one call, within a budget | yes |
