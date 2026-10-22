@@ -1,0 +1,18 @@
+{
+  "name": "naulon",
+  "version": "1.0.0",
+  "description": "A free research assistant: find sources and judge which answer your question, check references for retractions, verify a Citation License, and trace where a passage came from. Read-only; nothing in it can spend.",
+  "author": {
+    "name": "naulon",
+    "url": "https://naulon.app"
+  },
+  "homepage": "https://naulon.app",
+  "repository": "https://github.com/naulonapp/naulon-plugins",
+  "license": "MIT",
+  "icon": "./assets/logo.png",
+  "privacyPolicyUrl": "https://naulon.app/privacy",
+  "termsOfServiceUrl": "https://naulon.app/terms",
+  "documentationUrl": "https://naulon.app/docs/for-buyers",
+  "supportUrl": "https://github.com/naulonapp/naulon-plugins/issues",
+  "keywords": ["research", "citation", "retraction", "provenance", "licensing"]
+}
