@@ -115,7 +115,8 @@ naulon is in the [MCP Registry](https://registry.modelcontextprotocol.io) as `ap
 so any client that reads the registry can find it. The listing has two ways in:
 
 - **Hosted, free, no account:** `https://gate.naulon.app/_naulon/mcp/public` over Streamable HTTP.
-  It finds sources, shows what each costs, checks references for retractions and traces a passage.
+  It finds sources, looks one up by its URL or DOI, shows what each costs, checks references for
+  retractions and traces a passage.
   It takes no token and cannot pay.
 - **Local, your own wallet:** `npx -y @naulon/wayfarer-mcp` over stdio. It can pay tolls from a
   wallet you control. Its settings are in the
