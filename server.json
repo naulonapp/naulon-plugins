@@ -1,0 +1,58 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "app.naulon/naulon",
+  "title": "naulon",
+  "description": "Find sources, see what an AI agent pays to read each, and check references for retractions.",
+  "version": "1.0.0",
+  "websiteUrl": "https://naulon.app",
+  "repository": {
+    "url": "https://github.com/naulonapp/naulon",
+    "source": "github",
+    "subfolder": "packages/wayfarer-mcp"
+  },
+  "icons": [
+    { "src": "https://naulon.app/icon.svg", "mimeType": "image/svg+xml", "sizes": ["any"] },
+    { "src": "https://naulon.app/brand-kit/naulon-tile-512.png", "mimeType": "image/png", "sizes": ["512x512"] }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gate.naulon.app/_naulon/mcp/public"
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@naulon/wayfarer-mcp",
+      "version": "0.7.8",
+      "runtimeHint": "npx",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "PAYMENT_MODE",
+          "description": "Set to gateway to pay real tolls in USDC over Circle Gateway on Arc. Unset, settlement is mocked and nothing is spent.",
+          "choices": ["mock", "gateway"],
+          "default": "mock"
+        },
+        {
+          "name": "BUYER_PRIVATE_KEY",
+          "description": "Private key of the wallet tolls are paid from. Needed only with PAYMENT_MODE=gateway. It stays on your machine.",
+          "isSecret": true
+        },
+        {
+          "name": "TOLLGATE_URL",
+          "description": "The one gate every payment resolves against, for buying from a single publisher."
+        },
+        {
+          "name": "WAYFARER_ALLOW_DOMAINS",
+          "description": "Comma-separated publisher hosts the server may pay. Replaces the single-gate pin, so one server can buy from several publishers."
+        },
+        {
+          "name": "WAYFARER_BUDGET_USDC",
+          "description": "Spend ceiling for the session, in USDC. The model cannot raise it.",
+          "format": "number"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+name: registry
+on:
+  pull_request:
+    paths: ["server.json", "glama.json", "listing/.mcp.json", "scripts/check-registry.sh", ".github/workflows/registry.yml"]
+  push:
+    branches: [main]
+    paths: ["server.json"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: scripts/check-registry.sh ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
+
+  # Publishes server.json to registry.modelcontextprotocol.io under the app.naulon namespace.
+  # The signing key proves control of naulon.app (a TXT record at the apex holds its public half).
+  # It is a secret of the `mcp-registry` environment, which only `main` may deploy to, so a branch
+  # or a fork can never reach it.
+  publish:
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: mcp-registry
+    env:
+      MCP_PUBLISHER_VERSION: v1.8.9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stop when this version is already published
+        id: state
+        run: |
+          set -euo pipefail
+          name=$(node -p "encodeURIComponent(require('./server.json').name)")
+          version=$(node -p "require('./server.json').version")
+          code=$(curl --silent --output /dev/null --write-out '%{http_code}' \
+            "https://registry.modelcontextprotocol.io/v0/servers/${name}/versions/${version}")
+          case "$code" in
+            200) echo "version ${version} is already in the registry, nothing to publish"; echo "publish=no" >> "$GITHUB_OUTPUT" ;;
+            404) echo "publish=yes" >> "$GITHUB_OUTPUT" ;;
+            *) echo "the registry answered ${code}; not guessing" >&2; exit 1 ;;
+          esac
+      - name: Install cosign
+        if: steps.state.outputs.publish == 'yes'
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - name: Download and verify mcp-publisher
+        if: steps.state.outputs.publish == 'yes'
+        run: |
+          set -euo pipefail
+          archive="mcp-publisher_linux_amd64.tar.gz"
+          base_url="https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}"
+          curl --fail --location --silent --show-error --output "$archive" "$base_url/$archive"
+          curl --fail --location --silent --show-error --output "$archive.sigstore.json" "$base_url/$archive.sigstore.json"
+          cosign verify-blob \
+            --bundle "$archive.sigstore.json" \
+            --certificate-identity "https://github.com/modelcontextprotocol/registry/.github/workflows/release.yml@refs/tags/${MCP_PUBLISHER_VERSION}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            "$archive"
+          tar xzf "$archive" mcp-publisher
+          rm -f "$archive" "$archive.sigstore.json"
+      - name: Authenticate as naulon.app
+        if: steps.state.outputs.publish == 'yes'
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: ./mcp-publisher login dns --domain naulon.app --private-key "$MCP_PRIVATE_KEY"
+      - name: Publish
+        if: steps.state.outputs.publish == 'yes'
+        run: ./mcp-publisher publish
+      - name: Read the listing back
+        if: steps.state.outputs.publish == 'yes'
+        run: |
+          set -euo pipefail
+          name=$(node -p "encodeURIComponent(require('./server.json').name)")
+          version=$(node -p "require('./server.json').version")
+          curl --fail --silent "https://registry.modelcontextprotocol.io/v0/servers/${name}/versions/${version}" | head -c 2000
