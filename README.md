@@ -109,6 +109,18 @@ The hosted server at `https://gate.naulon.app/_naulon/mcp`:
 | `naulon_check_citations` | existence and retraction status for up to 25 references | no |
 | `naulon_retrieve` | an answer from CC0 and CC BY papers, every quote proven (test USDC for now) | yes |
 
+## Without the plugin
+
+naulon is in the [MCP Registry](https://registry.modelcontextprotocol.io) as `app.naulon/naulon`,
+so any client that reads the registry can find it. The listing has two ways in:
+
+- **Hosted, free, no account:** `https://gate.naulon.app/_naulon/mcp/public` over Streamable HTTP.
+  It finds sources, shows what each costs, checks references for retractions and traces a passage.
+  It takes no token and cannot pay.
+- **Local, your own wallet:** `npx -y @naulon/wayfarer-mcp` over stdio. It can pay tolls from a
+  wallet you control. Its settings are in the
+  [package README](https://github.com/naulonapp/naulon/tree/main/packages/wayfarer-mcp).
+
 ## Verifying a licence without trusting us
 
 Every paid read returns a Citation License: an RFC 7519 JWT signed EdDSA/Ed25519. Verify it with

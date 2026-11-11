@@ -23,6 +23,8 @@ plugins/naulon/
   skills/                             shared by both ecosystems
   assets/                             listing icon + composer icon
 listing/                              the directory package for Anthropic and OpenAI (free, read-only)
+server.json                           the MCP Registry listing (app.naulon/naulon)
+glama.json                            who may claim the Glama page
 ```
 
 `listing/` is not in either marketplace. It is the package for both directories, which do not
@@ -39,6 +41,23 @@ marketplaces and **both** `plugin.json` files in the same commit.
 Any change under `plugins/` is a release. Bump `version` in both `plugin.json` files to the same
 value. Installed copies only update when the version changes, so an unbumped change reaches nobody,
 and CI refuses it (`scripts/check-version-bump.sh`).
+
+## The registry listing
+
+`server.json` is published to `registry.modelcontextprotocol.io` by `.github/workflows/registry.yml`
+when a change to it reaches `main`. Directories such as Glama read the registry, so this one file
+is what they show.
+
+- A published version can never be edited. Any change to `server.json` needs a new `version`, and
+  CI refuses one without it (`scripts/check-registry.sh`).
+- `version` is the listing's own. `packages[].version` is the npm release of
+  `@naulon/wayfarer-mcp`, which must already be on npm carrying `mcpName: "app.naulon/naulon"`.
+- The one remote is the anonymous mount, the same URL `listing/.mcp.json` connects. It takes no
+  headers.
+- The name is proven by a TXT record at the `naulon.app` apex. Its signing key is the
+  `MCP_PRIVATE_KEY` secret of the `mcp-registry` environment, which only `main` can reach. To
+  rotate it, replace the TXT record and the secret together: a stale record is tried first and
+  fails the login.
 
 ## The two credential keys in `.mcp.json`
 
