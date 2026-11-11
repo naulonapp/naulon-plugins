@@ -36,7 +36,7 @@
     "privacyPolicyURL": "https://naulon.app/privacy",
     "termsOfServiceURL": "https://naulon.app/terms",
     "defaultPrompt": [
-      "Find sources about the HTTP 402 status code.",
+      "Which open research papers could answer: does vitamin D supplementation reduce fracture risk?",
       "Check these references for retractions before I cite them.",
       "Where did this passage come from? Paste a paragraph after this."
     ],
@@ -52,16 +52,16 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Find sources on a topic",
-              "prompt": "Find sources about the HTTP 402 status code.",
-              "tools_triggered": "naulon_discover",
-              "expected_behavior": "Lists matching articles from naulon publishers, such as \"The status code nobody used\" on blog.raxtzu.com, each with its site, summary and the price an agent would pay to read it. Nothing is bought."
-            },
-            {
               "description": "Judge which sources answer a question",
-              "prompt": "Which naulon sources would answer: how do AI agents pay to read articles? Show the price of each.",
+              "prompt": "Which naulon sources would answer: how did ancient Dionysian rituals survive in folk dance? Show the price of each.",
               "tools_triggered": "naulon_search",
               "expected_behavior": "Returns the matching sources with each publisher's summary, a fit and value verdict, and the price, and links https://naulon.app/docs/for-buyers for how buying works. Nothing is bought."
+            },
+            {
+              "description": "Preview the open research papers for a question",
+              "prompt": "Preview which open research papers could answer: does vitamin D supplementation reduce fracture risk? What would an answer cost?",
+              "tools_triggered": "naulon_retrieve",
+              "expected_behavior": "Lists the open papers considered for the question, marks any that cannot be quoted, and gives the price of an answer and of the quotes alone. Nothing is bought and no answer is written."
             },
             {
               "description": "Check references for retractions",
@@ -70,14 +70,14 @@
               "expected_behavior": "Reports the 1998 Lancet paper as retracted, with the retraction notice 10.1016/s0140-6736(10)60175-4 dated 2010-02-06, and the 2015 Nature paper \"Deep learning\" as clean."
             },
             {
-              "description": "Trace where a passage came from",
-              "prompt": "Where did this passage come from? \"The reason is not mysterious. A status code is only useful if the thing receiving it can act on it, and for most of the web’s life the thing receiving it was a person looking at a browser. People do not respond well to a machine-readable payment challenge. They respond to a checkout page, which is why we got checkout pages.\"",
+              "description": "Trace a passage that no naulon publisher holds",
+              "prompt": "Where did this passage come from? \"It is interesting to contemplate an entangled bank, clothed with many plants of many kinds, with birds singing on the bushes, with various insects flitting about, and with worms crawling through the damp earth, and to reflect that these elaborately constructed forms, so different from each other, have all been produced by laws acting around us.\"",
               "tools_triggered": "naulon_trace_passage",
-              "expected_behavior": "Names \"The status code nobody used\" at https://blog.raxtzu.com/the-status-code-nobody-used/ as holding most of the passage word for word, and says the trace detects verbatim copying only."
+              "expected_behavior": "Says the passage was not found word for word on the pages it searched and how many pages that was. It names no source it did not find."
             },
             {
               "description": "Quote the live price of one source",
-              "prompt": "Find an article about the HTTP 402 status code and tell me exactly what reading it would cost.",
+              "prompt": "Find an article about ancient ritual dance traditions and tell me exactly what reading it would cost.",
               "tools_triggered": "naulon_discover, naulon_quote",
               "expected_behavior": "Finds an article, probes its toll without paying, and reports the author's price and the buyer's total, which can be higher when the publisher adds a fee. Nothing is paid."
             }
@@ -89,7 +89,7 @@
             },
             {
               "description": "Buying is out of scope: the plugin shows prices but never purchases or returns paid text",
-              "prompt": "Buy and read the article \"The status code nobody used\" for me."
+              "prompt": "Buy and read the first article you find about ritual dance for me."
             },
             {
               "description": "An unrelated request does not call the plugin",
