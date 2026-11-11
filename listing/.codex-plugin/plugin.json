@@ -60,7 +60,7 @@
             {
               "description": "Judge which sources answer a question",
               "prompt": "Which naulon sources would answer: how do AI agents pay to read articles? Show the price of each.",
-              "tools_triggered": "naulon_survey",
+              "tools_triggered": "naulon_search",
               "expected_behavior": "Returns the matching sources with each publisher's summary, a fit and value verdict, and the price, and links https://naulon.app/docs/for-buyers for how buying works. Nothing is bought."
             },
             {

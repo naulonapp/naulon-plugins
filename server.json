@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.naulon/naulon",
   "title": "naulon",
-  "description": "Find sources, see what an AI agent pays to read each, and check references for retractions.",
-  "version": "1.0.0",
+  "description": "Check citations and retractions by DOI, and see the x402 price an AI agent pays to cite a source.",
+  "version": "1.0.1",
   "websiteUrl": "https://naulon.app",
   "repository": {
     "url": "https://github.com/naulonapp/naulon",
@@ -24,7 +24,7 @@
     {
       "registryType": "npm",
       "identifier": "@naulon/wayfarer-mcp",
-      "version": "0.7.8",
+      "version": "0.7.9",
       "runtimeHint": "npx",
       "transport": { "type": "stdio" },
       "environmentVariables": [

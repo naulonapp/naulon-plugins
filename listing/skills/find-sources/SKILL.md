@@ -11,7 +11,7 @@ naulon server is not connected and stop. Nothing here can pay: every tool is fre
 - **A topic.** Call `naulon_discover` with it. Present each candidate with its title, site,
   summary, read price and citation price. Use `naulon_appraise` with the same candidates, passed
   back whole, when the user wants them ranked by relevance.
-- **A question.** Call `naulon_survey` with it. Show each source with its publisher's summary, its
+- **A question.** Call `naulon_search` with it. Show each source with its publisher's summary, its
   fit and value verdict, and its price. If nothing matched, say so and offer a broader topic.
 - **The cost of one source.** Call `naulon_discover` first in the same conversation, then
   `naulon_quote` with that candidate's `slug` and `url`. Report the author's price and the buyer's
