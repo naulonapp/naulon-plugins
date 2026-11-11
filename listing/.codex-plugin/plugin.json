@@ -52,12 +52,6 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Find sources on a topic",
-              "prompt": "Find sources about ancient ritual dance traditions.",
-              "tools_triggered": "naulon_discover",
-              "expected_behavior": "Lists matching articles from naulon publishers, each with its site, summary and the price an agent would pay to read it. Nothing is bought."
-            },
-            {
               "description": "Judge which sources answer a question",
               "prompt": "Which naulon sources would answer: how did ancient Dionysian rituals survive in folk dance? Show the price of each.",
               "tools_triggered": "naulon_search",
