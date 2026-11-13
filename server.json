@@ -3,7 +3,7 @@
   "name": "app.naulon/naulon",
   "title": "naulon",
   "description": "Check citations and retractions by DOI, and see the x402 price an AI agent pays to cite a source.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "websiteUrl": "https://naulon.app",
   "repository": {
     "url": "https://github.com/naulonapp/naulon",
@@ -24,7 +24,7 @@
     {
       "registryType": "npm",
       "identifier": "@naulon/wayfarer-mcp",
-      "version": "0.7.9",
+      "version": "0.8.0",
       "runtimeHint": "npx",
       "transport": { "type": "stdio" },
       "environmentVariables": [
