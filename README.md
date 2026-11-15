@@ -107,6 +107,9 @@ The hosted server at `https://gate.naulon.app/_naulon/mcp`:
 | `naulon_read_held` | re-reads a source you already hold a licence for | no |
 | `naulon_research` | runs discover, appraise and pay in one call, within a budget | yes |
 | `naulon_check_citations` | existence and retraction status for up to 25 references | no |
+| `naulon_check_claim` | the paragraphs of a paper that speak to one sentence, or the held papers that do when no paper is named | no |
+| `naulon_check_answer` | both checks for a whole text: each reference, and each sentence that cites one | no |
+| `naulon_check_references` | the retracted, withdrawn or flagged works in one paper's reference list | no |
 | `naulon_retrieve` | an answer from CC0 and CC BY papers, every quote proven (test USDC for now) | yes |
 
 ## Without the plugin

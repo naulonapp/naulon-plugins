@@ -27,6 +27,21 @@ available, say the naulon server is not connected and stop.
 4. When a row lists `alternatives`, offer them as openly licensed papers on the same subject, each
    with its licence and `url`. When a row has a `page`, link it: it shows the notice status and a
    free copy where one exists.
+5. When the text makes claims about what the papers say, check those too. For a whole answer or
+   draft, call `naulon_check_answer` with the text and its reference list: it returns a row per
+   reference and, for each sentence that cites one, the paragraphs of that paper that speak to it.
+   For one sentence and one paper, call `naulon_check_claim` with `claim` and `paper`; leave
+   `paper` out to search the papers naulon holds. Neither tool runs a model or gives a verdict:
+   read the paragraphs and say whether they support the sentence, quoting the one that decides it.
+   - `absent` means the text that was searched does not address the sentence. `searched` says
+     whether that was the full text or only the abstract, so say which.
+   - `not_held`, `no_open_copy`, `none_readable`, or a sentence with `claimSkipped`, means nothing
+     was checked. Never report those as unsupported.
+   - `wordsNotFound` lists the sentence's words the paper does not use. Try the check again with
+     the paper's own terms before concluding.
+6. To check the works a paper itself cites, call `naulon_check_references` with the paper. Read
+   `references` before trusting the answer: `none_flagged` covers only the `checked` count, and
+   `none_checked` or `references_unknown` means nothing is known, not that the list is clean.
 
 The tool reports facts from Crossref and Retraction Watch, not a judgement of the research. Say that
 when the user asks whether a paper is good. An `authorNote` is the author's own statement about
