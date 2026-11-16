@@ -110,7 +110,8 @@ The hosted server at `https://gate.naulon.app/_naulon/mcp`:
 | `naulon_check_claim` | the paragraphs of a paper that speak to one sentence, or the held papers that do when no paper is named | no |
 | `naulon_check_answer` | both checks for a whole text: each reference, and each sentence that cites one | no |
 | `naulon_check_references` | the retracted, withdrawn or flagged works in one paper's reference list | no |
-| `naulon_retrieve` | an answer from CC0 and CC BY papers, every quote proven (test USDC for now) | yes |
+| `naulon_retrieve` | an answer from CC0 and CC BY papers, every quote proven, paid in USDC | yes |
+| `naulon_notices` | the papers you bought text from that were later retracted, withdrawn, corrected or flagged, with the sentences you were sold; new ones also open your next reply | no |
 
 ## Without the plugin
 
