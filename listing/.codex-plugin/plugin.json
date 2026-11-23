@@ -59,9 +59,9 @@
             },
             {
               "description": "Preview the open research papers for a question",
-              "prompt": "Preview which open research papers could answer: does vitamin D supplementation reduce fracture risk? What would an answer cost?",
+              "prompt": "Preview which open research papers could answer: does vitamin D supplementation reduce fracture risk? What would the quotes cost?",
               "tools_triggered": "naulon_retrieve",
-              "expected_behavior": "Lists the open papers considered for the question, marks any that cannot be quoted, and gives the price of an answer and of the quotes alone. Nothing is bought and no answer is written."
+              "expected_behavior": "Lists the open papers considered for the question, marks any that cannot be quoted, and gives the price of the proven quotes. Nothing is bought."
             },
             {
               "description": "Check references for retractions",
